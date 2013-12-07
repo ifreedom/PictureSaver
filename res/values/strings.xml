@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">PictureSaver</string>
+    <string name="storgeError">Can not save picture!</string>
+    <string name="saveComplete">Picture Saved to %s.</string>
+    <string name="title_activity_main">PictureSaver</string>
+    <string name="ok_iknow">OK</string>
+   
+</resources>

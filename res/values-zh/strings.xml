@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    
+    <string name="app_name">图片保存器</string>
+    <string name="storgeError">图片保存失败!</string>
+    <string name="saveComplete">图片已保存到%s</string>
+    <string name="title_activity_main">图片保存器</string>
+    <string name="ok_iknow">确定</string>
+    
+</resources>
