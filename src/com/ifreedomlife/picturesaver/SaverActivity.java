@@ -8,6 +8,9 @@ import java.io.OutputStream;
 import java.util.Calendar;
 import java.util.Locale;
 
+import com.google.analytics.tracking.android.EasyTracker;
+import com.google.analytics.tracking.android.MapBuilder;
+
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -19,11 +22,18 @@ import android.util.Log;
 import android.widget.Toast;
 
 public class SaverActivity extends Activity {
+	final String TAG = "PictureSaver";
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		
+	}
+	
+	@Override
+	public void onStart() {
+		super.onStart();
+		EasyTracker.getInstance(this).activityStart(this);
+
 		// Get intent, action and MIME type
 	    Intent intent = getIntent();
 	    String action = intent.getAction();
@@ -31,12 +41,18 @@ public class SaverActivity extends Activity {
 
 	    if (type != null && type.startsWith("image/")) {
 		    if (Intent.ACTION_SEND.equals(action)) handleSendImage(intent);
-		    if (Intent.ACTION_ATTACH_DATA.equals(action)) handleAttachImage(intent);	    	
+		    if (Intent.ACTION_ATTACH_DATA.equals(action)) handleAttachImage(intent);
 	    }
 	    
 		finish();
 	}
-	
+
+	@Override
+	public void onStop() {
+		super.onStop();
+		EasyTracker.getInstance(this).activityStop(this);
+	}
+
 	void showLongToast(int resId) {
 		Toast.makeText(this, resId, Toast.LENGTH_LONG).show();
 	}
@@ -59,12 +75,14 @@ public class SaverActivity extends Activity {
 	void handleSendImage(Intent intent) {
 	    Uri imageUri = (Uri) intent.getParcelableExtra(Intent.EXTRA_STREAM);
 	    if (imageUri != null) {
+	    	EasyTracker.getInstance(this).send(MapBuilder.createEvent(TAG, "Save", "ByShare", null).build());
 	    	new SavePictureTask(this, imageUri).execute();
 	    }
 	}
 	void handleAttachImage(Intent intent) {
 	    Uri imageUri = intent.getData();
 	    if (imageUri != null) {
+	    	EasyTracker.getInstance(this).send(MapBuilder.createEvent(TAG, "Save", "BySetAs", null).build());
 	    	new SavePictureTask(this, imageUri).execute();
 	    }
 	}

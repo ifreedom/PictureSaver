@@ -8,6 +8,7 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageManager.NameNotFoundException;
 
 public class MainActivity extends Activity {
 
@@ -19,6 +20,15 @@ public class MainActivity extends Activity {
 		showAbout();
 	}
 
+	private String getVersion() {
+		try {
+			return "v" + getPackageManager().getPackageInfo(getPackageName(), 0).versionName;
+		} catch (NameNotFoundException e) {
+			return "";
+		}
+		
+	}
+	
 	private void showAbout() {
 		WebView web = new WebView(this);
 		web.loadUrl("file:///android_asset/pages/about.html");
@@ -31,8 +41,9 @@ public class MainActivity extends Activity {
 		    }
 		});
 		
+		
 		new AlertDialog.Builder(this)
-		    .setTitle(getString(R.string.app_name) + " " + getString(R.string.version))
+		    .setTitle(getString(R.string.app_name) + " " + getVersion())
 		    .setCancelable(false)
 			.setNegativeButton(getString(R.string.ok_iknow), new DialogInterface.OnClickListener() {
 				
