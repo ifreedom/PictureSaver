@@ -29,10 +29,9 @@ public class SaverActivity extends Activity {
 	    String action = intent.getAction();
 	    String type = intent.getType();
 
-	    if (Intent.ACTION_SEND.equals(action) && type != null) {
-	        if (type.startsWith("image/")) {
-	            handleSendImage(intent);
-	        }
+	    if (type != null && type.startsWith("image/")) {
+		    if (Intent.ACTION_SEND.equals(action)) handleSendImage(intent);
+		    if (Intent.ACTION_ATTACH_DATA.equals(action)) handleAttachImage(intent);	    	
 	    }
 	    
 		finish();
@@ -59,6 +58,12 @@ public class SaverActivity extends Activity {
 	
 	void handleSendImage(Intent intent) {
 	    Uri imageUri = (Uri) intent.getParcelableExtra(Intent.EXTRA_STREAM);
+	    if (imageUri != null) {
+	    	new SavePictureTask(this, imageUri).execute();
+	    }
+	}
+	void handleAttachImage(Intent intent) {
+	    Uri imageUri = intent.getData();
 	    if (imageUri != null) {
 	    	new SavePictureTask(this, imageUri).execute();
 	    }

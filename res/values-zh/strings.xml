@@ -6,5 +6,7 @@
     <string name="saveComplete">图片已保存到%s</string>
     <string name="title_activity_main">图片保存器</string>
     <string name="ok_iknow">确定</string>
+    <string name="setas_label">保存</string>
+    <string name="version">v1.1</string>
     
 </resources>

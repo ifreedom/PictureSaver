@@ -31,7 +31,9 @@ public class MainActivity extends Activity {
 		    }
 		});
 		
-		new AlertDialog.Builder(this).setTitle(getString(R.string.app_name)).setCancelable(false)
+		new AlertDialog.Builder(this)
+		    .setTitle(getString(R.string.app_name) + " " + getString(R.string.version))
+		    .setCancelable(false)
 			.setNegativeButton(getString(R.string.ok_iknow), new DialogInterface.OnClickListener() {
 				
 				@Override
