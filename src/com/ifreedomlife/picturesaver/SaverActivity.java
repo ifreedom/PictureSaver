@@ -18,10 +18,12 @@ import android.os.Environment;
 import android.app.Activity;
 import android.content.ContentResolver;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.util.Log;
 import android.widget.Toast;
 
 public class SaverActivity extends Activity {
+
 	final String TAG = "PictureSaver";
 
 	@Override
@@ -115,13 +117,22 @@ public class SaverActivity extends Activity {
 	static String formatFilename(String ext) {
 		Calendar c = Calendar.getInstance();
 	    return String.format(Locale.US, "%d-%02d-%02d-%08d.%s", 
-	    		c.get(Calendar.YEAR), c.get(Calendar.MONTH), c.get(Calendar.DAY_OF_MONTH), 
+	    		c.get(Calendar.YEAR), c.get(Calendar.MONTH) + 1, c.get(Calendar.DAY_OF_MONTH), 
 	    		c.getTimeInMillis() % 100000000, ext);
 	}
 	
+	File getDownloadDirectory() {
+		SharedPreferences prefs = getSharedPreferences(MainActivity.PREFS_NAME, MODE_PRIVATE);
+		String download_dir = prefs.getString("pref_download_dir", null);
+		
+		if (download_dir != null) return new File(download_dir);
+		
+		return Environment.getExternalStoragePublicDirectory(
+			Environment.DIRECTORY_PICTURES);
+	}
+	
 	String savePicture(Uri imageUri) {
-		File path = Environment.getExternalStoragePublicDirectory(
-	            Environment.DIRECTORY_PICTURES);
+		File path = getDownloadDirectory();
 
 		try {
 	        // Make sure the Pictures directory exists.
@@ -145,7 +156,7 @@ public class SaverActivity extends Activity {
 	    } catch (IOException e) {
 	        // Unable to create file, likely because external storage is
 	        // not currently mounted.
-	        Log.w("ExternalStorage", "Error writing " + path, e);
+	        Log.w(TAG, "Error writing " + path, e);
 	        return null;
 	    }	    
 	}

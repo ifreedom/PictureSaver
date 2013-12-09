@@ -7,5 +7,12 @@
     <string name="title_activity_main">PictureSaver</string>
     <string name="ok_iknow">OK</string>
     <string name="setas_label">Save</string>
+    
+    <string name="pref_usage">Usage</string>
+    <string name="pref_usage_summary">Use his app via \&quot;Share\&quot; and \&quot;Set as&#8230;\&quot; action!</string>
+    <string name="pref_download_dir">Download directory</string>
+    <string name="pref_about">About</string>
    
+    <string name="no_dir_chooser_dialog_title">Error</string>
+    <string name="no_dir_chooser">Sorry, can\&apos;t find a valid directory chooser!</string>
 </resources>
