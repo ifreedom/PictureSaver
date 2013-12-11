@@ -69,30 +69,45 @@ public class MainActivity extends PreferenceActivity {
 		download_dir_pref = pref;
 	}
 	
-	private void showDirectoryPickError() {
-		new AlertDialog.Builder(this)
-	    .setTitle(getString(R.string.no_dir_chooser_dialog_title))
-	    .setCancelable(false)
-		.setNegativeButton(getString(R.string.ok_iknow), new DialogInterface.OnClickListener() {
-			
-			@Override
-			public void onClick(DialogInterface dialog, int which) {
-				dialog.cancel();
-			}
-		}).setMessage(R.string.no_dir_chooser).create().show();
+	private void showFallbackDirectoryPicker() {
+		SimpleDirectoryChooser chooser = new SimpleDirectoryChooser(this, getDownloadDirectory());
 		
+		chooser.setTitle(getString(R.string.fallback_dir_chooser_dialog_title));
+		chooser.setButtonLabel(getString(R.string.yes), getString(R.string.no));
+
+		chooser.setOnResultListener(new SimpleDirectoryChooser.OnResultListener() {
+			@Override
+			public void onResult(SimpleDirectoryChooser chooser, String result) {
+				if (result != null) {
+					notifyDownloadDirectoryChanged(result);
+				}
+			}
+		});
+
+		chooser.show();
 	}
 	
-	private void pickDirectory () {
+	private boolean showEstrongsDirectoryPicker() {
 		Intent intent = new Intent();
 		intent.setAction("com.estrongs.action.PICK_DIRECTORY");
 		intent.putExtra("com.estrongs.intent.extra.TITLE", "Select Directory");
 		
 		try {
 			startActivityForResult(intent, PICK_REQUEST_CODE);
+			return true;
 		} catch (ActivityNotFoundException e) {
-			showDirectoryPickError();
+			return false;
 		}
+	}
+	
+	private void pickDirectory () {
+		boolean ret = false;
+		
+		ret = ret || showEstrongsDirectoryPicker();
+		// other directory picker...
+		
+		// fallback to simple directory input.
+		if (!ret) showFallbackDirectoryPicker();
 	}
 
 	private String getDownloadDirectory() {

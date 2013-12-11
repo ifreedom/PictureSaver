@@ -13,7 +13,8 @@
     <string name="pref_download_dir">下载目录</string>
     <string name="pref_about">关于</string>
    
-    <string name="no_dir_chooser_dialog_title">错误发生</string>
-    <string name="no_dir_chooser">抱歉，找不到有效的目录选择器！</string>
+    <string name="fallback_dir_chooser_dialog_title">请输入目录</string>
+    <string name="yes">确定</string>
+    <string name="no">取消</string>
 
 </resources>
