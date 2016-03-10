@@ -8,8 +8,9 @@ import java.io.OutputStream;
 import java.util.Calendar;
 import java.util.Locale;
 
-import com.google.analytics.tracking.android.EasyTracker;
-import com.google.analytics.tracking.android.MapBuilder;
+import com.google.android.gms.analytics.GoogleAnalytics;
+import com.google.android.gms.analytics.HitBuilders;
+import com.google.android.gms.analytics.Tracker;
 
 import android.net.Uri;
 import android.os.AsyncTask;
@@ -25,6 +26,7 @@ import android.widget.Toast;
 public class SaverActivity extends Activity {
 
 	final String TAG = "PictureSaver";
+	Tracker mTracker;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -34,7 +36,9 @@ public class SaverActivity extends Activity {
 	@Override
 	public void onStart() {
 		super.onStart();
-		EasyTracker.getInstance(this).activityStart(this);
+		MainApplication app = (MainApplication)getApplication();
+		mTracker = app.getDefaultTracker();
+		GoogleAnalytics.getInstance(this).reportActivityStart(this);
 
 		// Get intent, action and MIME type
 	    Intent intent = getIntent();
@@ -52,7 +56,7 @@ public class SaverActivity extends Activity {
 	@Override
 	public void onStop() {
 		super.onStop();
-		EasyTracker.getInstance(this).activityStop(this);
+		GoogleAnalytics.getInstance(this).reportActivityStop(this);
 	}
 
 	void showLongToast(int resId) {
@@ -76,15 +80,15 @@ public class SaverActivity extends Activity {
 	
 	void handleSendImage(Intent intent) {
 	    Uri imageUri = (Uri) intent.getParcelableExtra(Intent.EXTRA_STREAM);
-	    if (imageUri != null) {
-	    	EasyTracker.getInstance(this).send(MapBuilder.createEvent(TAG, "Save", "ByShare", null).build());
+		if (imageUri != null) {
+			mTracker.send(new HitBuilders.EventBuilder().setCategory(TAG).setAction("ByShare").setLabel("ByShare").build());
 	    	new SavePictureTask(this, imageUri).execute();
 	    }
 	}
 	void handleAttachImage(Intent intent) {
 	    Uri imageUri = intent.getData();
-	    if (imageUri != null) {
-	    	EasyTracker.getInstance(this).send(MapBuilder.createEvent(TAG, "Save", "BySetAs", null).build());
+		if (imageUri != null) {
+			mTracker.send(new HitBuilders.EventBuilder().setCategory(TAG).setAction("Save").setLabel("BySetAs").build());
 	    	new SavePictureTask(this, imageUri).execute();
 	    }
 	}
